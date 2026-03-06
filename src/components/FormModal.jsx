@@ -14,7 +14,7 @@ const VARIANTS = {
   demo: {
     title: 'Записаться на демо',
     subtitle: 'Оставьте контакты — мы свяжемся и покажем возможности EstateCRM под вашу модель продаж',
-    button: 'Отправить заявку',
+    button: 'Записаться на демо',
     successTitle: 'Заявка отправлена!',
     successText: 'Мы свяжемся с вами в ближайшее время для согласования даты демонстрации.',
     successButton: 'Закрыть',
@@ -26,10 +26,11 @@ function FormModal({ isOpen, onClose, onSuccess, variant = 'roi' }) {
   const cfg = VARIANTS[variant]
   const [form, setForm] = useState({
     name: '',
-    lastName: '',
     company: '',
-    phone: '',
     email: '',
+    phone: '',
+    consent: true,
+    marketing: true,
   })
   const [status, setStatus] = useState('idle')
   const [errorMsg, setErrorMsg] = useState('')
@@ -37,27 +38,20 @@ function FormModal({ isOpen, onClose, onSuccess, variant = 'roi' }) {
   if (!isOpen) return null
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setForm(prev => ({ ...prev, [name]: value }))
+    const { name, value, type, checked } = e.target
+    setForm(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }))
   }
 
-  const handleSubmit = async () => {
-    const { name, phone, email } = form
-    if (!name.trim() || !phone.trim() || !email.trim()) {
-      alert('Пожалуйста, заполните Имя, Телефон и E-mail')
-      return
-    }
-
+  const handleSubmit = async (e) => {
+    e.preventDefault()
     setStatus('loading')
 
     try {
-      const fullName = [form.name, form.lastName].filter(Boolean).join(' ')
-
-      await fetch('/roi/api/submit-lead', {
+      const res = await fetch('/roi/api/submit-lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: fullName,
+          name: form.name,
           company: form.company,
           email: form.email,
           phone: form.phone,
@@ -65,7 +59,14 @@ function FormModal({ isOpen, onClose, onSuccess, variant = 'roi' }) {
         }),
       })
 
-      setStatus('success')
+      const data = await res.json()
+
+      if (data.success) {
+        setStatus('success')
+      } else {
+        setErrorMsg('Не удалось отправить заявку. Попробуйте ещё раз.')
+        setStatus('error')
+      }
     } catch (err) {
       console.error('Submit error:', err)
       setStatus('success')
@@ -84,7 +85,7 @@ function FormModal({ isOpen, onClose, onSuccess, variant = 'roi' }) {
   const resetForm = () => {
     setStatus('idle')
     setErrorMsg('')
-    setForm({ name: '', lastName: '', company: '', phone: '', email: '' })
+    setForm({ name: '', company: '', email: '', phone: '', consent: true, marketing: true })
   }
 
   const handleClose = () => {
@@ -97,64 +98,105 @@ function FormModal({ isOpen, onClose, onSuccess, variant = 'roi' }) {
   }
 
   return (
-    <div className="mo on" onClick={handleOverlayClick}>
-      <div className="mb">
-        <button className="mc" onClick={handleClose} type="button">&times;</button>
+    <div className="modal-overlay" onClick={handleOverlayClick}>
+      <div className="modal">
+        <div className="modal__header">
+          <button className="modal__close" onClick={handleClose} type="button">&times;</button>
+          <h2 className="modal__title">{cfg.title}</h2>
+          <p className="modal__subtitle">{cfg.subtitle}</p>
+        </div>
 
         {status === 'success' ? (
-          <div className="modal-success">
-            <div className="modal-success-icon">&#10003;</div>
-            <div className="mt">{cfg.successTitle}</div>
-            <p className="modal-success-text">{cfg.successText}</p>
-            <button className="btn-fs" onClick={handleSuccessAction}>{cfg.successButton}</button>
+          <div className="modal__body">
+            <div className="modal__success">
+              <div className="modal__success-icon">&#10003;</div>
+              <h3>{cfg.successTitle}</h3>
+              <p>{cfg.successText}</p>
+              <button className="modal__submit" type="button" onClick={handleSuccessAction}>
+                {cfg.successButton}
+              </button>
+            </div>
           </div>
         ) : (
-          <>
-            <div className="mt">{cfg.title}</div>
-            <div className="ms">{cfg.subtitle}</div>
-
-            <div className="fg-row">
-              <div className="fg">
-                <label>Имя</label>
-                <input type="text" name="name" value={form.name} onChange={handleChange}
-                  placeholder="Александр" disabled={status === 'loading'} />
-              </div>
-              <div className="fg">
-                <label>Фамилия</label>
-                <input type="text" name="lastName" value={form.lastName} onChange={handleChange}
-                  placeholder="Иванов" disabled={status === 'loading'} />
-              </div>
+          <form className="modal__body" onSubmit={handleSubmit}>
+            <div className="modal__field">
+              <label className="modal__label">Имя <span>*</span></label>
+              <input
+                className="modal__input"
+                type="text"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                required
+                disabled={status === 'loading'}
+              />
+            </div>
+            <div className="modal__field">
+              <label className="modal__label">Название компании <span>*</span></label>
+              <input
+                className="modal__input"
+                type="text"
+                name="company"
+                value={form.company}
+                onChange={handleChange}
+                required
+                disabled={status === 'loading'}
+              />
+            </div>
+            <div className="modal__field">
+              <label className="modal__label">Рабочая почта <span>*</span></label>
+              <input
+                className="modal__input"
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                required
+                disabled={status === 'loading'}
+              />
+            </div>
+            <div className="modal__field">
+              <label className="modal__label">Телефон <span>*</span></label>
+              <input
+                className="modal__input"
+                type="tel"
+                name="phone"
+                value={form.phone}
+                onChange={handleChange}
+                required
+                disabled={status === 'loading'}
+              />
             </div>
 
-            <div className="fg">
-              <label>Компания-застройщик</label>
-              <input type="text" name="company" value={form.company} onChange={handleChange}
-                placeholder={'\u00ABООО СтройГрупп\u00BB'}
-                disabled={status === 'loading'} />
-            </div>
-
-            <div className="fg">
-              <label>Телефон</label>
-              <input type="tel" name="phone" value={form.phone} onChange={handleChange}
-                placeholder="+7 (___) ___-__-__" disabled={status === 'loading'} />
-            </div>
-
-            <div className="fg">
-              <label>E-mail</label>
-              <input type="email" name="email" value={form.email} onChange={handleChange}
-                placeholder="info@company.ru" disabled={status === 'loading'} />
-            </div>
+            <label className="modal__checkbox">
+              <input
+                type="checkbox"
+                name="consent"
+                checked={form.consent}
+                onChange={handleChange}
+                disabled={status === 'loading'}
+              />
+              <span>Согласие на обработку <a href="#">персональных данных</a></span>
+            </label>
+            <label className="modal__checkbox">
+              <input
+                type="checkbox"
+                name="marketing"
+                checked={form.marketing}
+                onChange={handleChange}
+                disabled={status === 'loading'}
+              />
+              <span>Хочу получать email с новыми кейсами, рекламой и <a href="#">быть в курсе важных событий</a></span>
+            </label>
 
             {status === 'error' && (
-              <p style={{ color: '#c0392b', fontSize: 13, textAlign: 'center', margin: '8px 0' }}>{errorMsg}</p>
+              <p className="modal__error">{errorMsg}</p>
             )}
 
-            <button className="btn-fs" onClick={handleSubmit} disabled={status === 'loading'}>
+            <button className="modal__submit" type="submit" disabled={status === 'loading'}>
               {status === 'loading' ? 'Отправка...' : cfg.button}
             </button>
-
-            <div className="fn">Нажимая кнопку, вы соглашаетесь с политикой обработки персональных данных</div>
-          </>
+          </form>
         )}
       </div>
     </div>

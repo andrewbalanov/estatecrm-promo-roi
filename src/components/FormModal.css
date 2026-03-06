@@ -1,100 +1,238 @@
-.mo {
-  display: none;
+.modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(8,10,35,.72);
-  z-index: 1000;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(5px);
+  z-index: 1000;
+  padding: 20px;
 }
-.mo.on { display: flex; }
-.mb {
-  background: #fff;
-  border-radius: 18px;
-  padding: 36px 32px;
-  width: 100%;
-  max-width: 440px;
-  box-shadow: 0 20px 70px rgba(0,0,0,.28);
+
+.modal {
+  width: 480px;
+  max-width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: modalFadeIn 0.25s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal__header {
+  background: linear-gradient(135deg, #3e57da 0%, #202358 100%);
+  padding: 40px 40px 30px;
   position: relative;
+  border-radius: 16px 16px 0 0;
 }
-.mc {
+
+.modal__close {
   position: absolute;
-  top: 14px;
+  top: 16px;
   right: 16px;
+  width: 32px;
+  height: 32px;
   background: none;
   border: none;
-  font-size: 18px;
-  color: var(--g5);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 28px;
   cursor: pointer;
-  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
   line-height: 1;
 }
-.mc:hover { color: var(--g8); }
-.mt { font-size: 19px; font-weight: 700; color: var(--primary); margin-bottom: 3px; }
-.ms { font-size: 13px; color: var(--g6); margin-bottom: 22px; }
-.fg { margin-bottom: 14px; }
-.fg label {
+
+.modal__close:hover {
+  color: #ffffff;
+}
+
+.modal__title {
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 34px;
+  color: #ffffff;
+  text-align: center;
+}
+
+.modal__subtitle {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+  color: #ffffff;
+  text-align: center;
+  margin-top: 12px;
+}
+
+.modal__body {
+  background: #ffffff;
+  padding: 30px 40px 40px;
+  border-radius: 0 0 16px 16px;
+}
+
+.modal__field {
+  margin-bottom: 20px;
+}
+
+.modal__label {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #333333;
+  margin-bottom: 6px;
   display: block;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--g6);
-  letter-spacing: .5px;
-  text-transform: uppercase;
-  margin-bottom: 5px;
 }
-.fg input, .fg select {
+
+.modal__label span {
+  color: #e53935;
+}
+
+.modal__input {
   width: 100%;
-  background: var(--bg2);
-  border: 1.5px solid var(--g4);
+  height: 44px;
+  border: 1px solid #d0d5dd;
   border-radius: 8px;
-  padding: 9px 11px;
+  padding: 0 14px;
+  font-size: 16px;
   font-family: var(--font);
-  font-size: 14px;
-  color: var(--g8);
+  color: #333333;
   outline: none;
-  transition: border-color .2s;
+  transition: border-color 0.2s;
+  background: #ffffff;
 }
-.fg input:focus, .fg select:focus {
-  border-color: var(--secondary);
-  box-shadow: 0 0 0 3px rgba(67,86,210,.09);
+
+.modal__input:focus {
+  border-color: #3e57da;
 }
-.fg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
-.btn-fs {
-  width: 100%;
-  background: var(--secondary);
-  border: none;
-  color: #fff;
-  font-size: 14px;
-  font-weight: 700;
-  padding: 12px;
-  border-radius: 10px;
+
+.modal__input:disabled {
+  background: #f5f5f5;
+  color: #999;
+}
+
+.modal__checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  line-height: 18px;
+  color: #333333;
   cursor: pointer;
+}
+
+.modal__checkbox input[type="checkbox"] {
+  accent-color: #3e57da;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  cursor: pointer;
+}
+
+.modal__checkbox a {
+  color: #3e57da;
+  pointer-events: auto;
+}
+
+.modal__error {
+  color: #e53935;
+  font-size: 14px;
+  text-align: center;
+  margin: 8px 0 0;
+}
+
+.modal__submit {
+  width: 100%;
+  height: 56px;
+  background: #202358;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 28px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-top: 16px;
   font-family: var(--font);
-  margin-top: 6px;
-  box-shadow: 0 4px 14px rgba(67,86,210,.3);
-  transition: all .2s;
+  transition: opacity 0.2s;
 }
-.btn-fs:hover { background: var(--blue); }
-.btn-fs:disabled { opacity: .6; cursor: not-allowed; }
-.fn { font-size: 11px; color: var(--g5); text-align: center; margin-top: 10px; }
 
-/* Success state */
-.modal-success { text-align: center; padding: 20px 0 10px; }
-.modal-success-icon {
-  width: 56px; height: 56px; border-radius: 50%;
-  background: var(--green); color: #fff; font-size: 28px; font-weight: 700;
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 18px;
+.modal__submit:hover {
+  opacity: 0.9;
 }
-.modal-success .mt { margin-bottom: 8px; }
-.modal-success-text { font-size: 13px; color: var(--g6); line-height: 1.5; margin-bottom: 22px; }
 
-@media (max-width: 480px) {
-  .mb { padding: 28px 18px; margin: 0 12px; }
-  .fg-row { grid-template-columns: 1fr; }
+.modal__submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.modal__success {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.modal__success-icon {
+  width: 56px;
+  height: 56px;
+  background: #4caf50;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.modal__success h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.modal__success p {
+  font-size: 15px;
+  line-height: 22px;
+  color: #666;
+  margin-bottom: 16px;
 }
 
 @media print {
-  .mo { display: none !important; }
+  .modal-overlay { display: none !important; }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .modal__header {
+    padding: 30px 24px 24px;
+  }
+  .modal__title {
+    font-size: 24px;
+    line-height: 30px;
+  }
+  .modal__subtitle {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .modal__body {
+    padding: 24px 24px 30px;
+  }
+  .modal__submit {
+    height: 50px;
+    font-size: 16px;
+  }
 }
