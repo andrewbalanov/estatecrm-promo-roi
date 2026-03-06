@@ -113,15 +113,20 @@ const submitLeadHandler = async (req, res) => {
       return res.status(502).json({ error: 'Bitrix24 lead creation failed' })
     }
 
-    // Send email notification (non-blocking)
-    transporter.sendMail({
-      from: '"EstateCRM - Sales" <sales@estatecrm.io>',
-      to: 'sales@estatecrm.io',
-      subject: isDemo
-        ? 'Новая заявка: Лендинг "ROI" - Форма "Записаться на демо"'
-        : 'Новая заявка: Лендинг "ROI" - Форма "Расчёт ROI"',
-      html: buildEmailHtml({ name, company, email, phone, url: pageUrl }),
-    }).catch(err => console.error('Email send error:', err))
+    // Send email notification
+    try {
+      const emailResult = await transporter.sendMail({
+        from: '"EstateCRM - Sales" <sales@estatecrm.io>',
+        to: 'sales@estatecrm.io',
+        subject: isDemo
+          ? 'Новая заявка: Лендинг "ROI" - Форма "Записаться на демо"'
+          : 'Новая заявка: Лендинг "ROI" - Форма "Расчёт ROI"',
+        html: buildEmailHtml({ name, company, email, phone, url: pageUrl }),
+      })
+      console.log('Email sent:', emailResult.messageId)
+    } catch (emailErr) {
+      console.error('Email send error:', emailErr)
+    }
 
     res.json({ success: true, leadId: bitrixData.result })
   } catch (err) {
