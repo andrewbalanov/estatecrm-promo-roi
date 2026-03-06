@@ -3,7 +3,7 @@ import { DEFAULTS, SCENARIOS, getTariff, compute, fmt, sc2str, buildTableRows } 
 import { TIPS } from '../utils/tooltips'
 import './Calculator.css'
 
-function Calculator({ onOpenForm }) {
+function Calculator({ onOpenForm, onCalcDone }) {
   const [inputs, setInputs] = useState({ ...DEFAULTS })
   const [calculated, setCalculated] = useState(false)
   const [results, setResults] = useState(null)
@@ -34,6 +34,7 @@ function Calculator({ onOpenForm }) {
     setCalculated(true)
     setShowPdf(true)
     if (company) setCompanyName(company)
+    if (onCalcDone) onCalcDone()
     setTimeout(() => {
       if (resultsRef.current) {
         resultsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -42,7 +43,11 @@ function Calculator({ onOpenForm }) {
   }, [inputs])
 
   const handleCalculate = () => {
-    onOpenForm(runCalc)
+    if (calculated) {
+      runCalc(companyName)
+    } else {
+      onOpenForm(runCalc)
+    }
   }
 
   const doReset = () => {
@@ -466,7 +471,7 @@ function Calculator({ onOpenForm }) {
           {!calculated && (
             <div className="hint">Нажмите «Рассчитать», чтобы увидеть результаты</div>
           )}
-          <button className="btn-calc" onClick={handleCalculate}>Рассчитать</button>
+          <button className="btn-calc" onClick={handleCalculate}>{calculated ? 'Пересчитать' : 'Рассчитать'}</button>
           <button className="btn-reset" onClick={doReset}>{'\u21A9'} Сбросить к значениям по умолчанию</button>
         </div>
       </aside>

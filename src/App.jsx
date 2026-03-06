@@ -9,6 +9,7 @@ import './App.css'
 function App() {
   const [roiModalOpen, setRoiModalOpen] = useState(false)
   const [demoModalOpen, setDemoModalOpen] = useState(false)
+  const [pdfReady, setPdfReady] = useState(false)
   const calcCallbackRef = useRef(null)
 
   const handleOpenForm = (callback) => {
@@ -30,9 +31,9 @@ function App() {
   return (
     <div className="landing">
       <HeroSection />
-      <Calculator onOpenForm={handleOpenForm} />
+      <Calculator onOpenForm={handleOpenForm} onCalcDone={() => setPdfReady(true)} />
       <CasesSection />
-      <CtaSection onOpenDemo={() => setDemoModalOpen(true)} onPdfCta={handlePdfCta} />
+      <CtaSection onOpenDemo={() => setDemoModalOpen(true)} onPdfCta={handlePdfCta} pdfReady={pdfReady} />
       <FormModal
         isOpen={roiModalOpen}
         onClose={() => setRoiModalOpen(false)}
