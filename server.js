@@ -75,13 +75,18 @@ function buildEmailHtml({ name, company, email, phone, url }) {
 
 // API: create Bitrix24 lead + send email
 const submitLeadHandler = async (req, res) => {
-  const { name, company, email, phone } = req.body
+  const { name, company, email, phone, source } = req.body
 
   if (!name || !email || !phone) {
     return res.status(400).json({ error: 'Missing required fields' })
   }
 
   const pageUrl = req.headers.referer || 'https://promo.estatecrm.io/roi/'
+  const isDemo = source === 'Demo'
+  const leadTitle = isDemo ? `Демо CRM - ${company || name}` : `ROI CRM - ${company || name}`
+  const leadComment = isDemo
+    ? 'Источник: Лендинг «ROI» — Форма «Записаться на демо»'
+    : 'Источник: Лендинг «ROI внедрения CRM»'
 
   try {
     // Create Bitrix24 lead
@@ -90,13 +95,13 @@ const submitLeadHandler = async (req, res) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         fields: {
-          TITLE: `ROI CRM - ${company || name}`,
+          TITLE: leadTitle,
           NAME: name,
           COMPANY_TITLE: company,
           EMAIL: [{ VALUE: email, VALUE_TYPE: 'WORK' }],
           PHONE: [{ VALUE: phone, VALUE_TYPE: 'WORK' }],
           SOURCE_ID: 'WEB',
-          COMMENTS: `Источник: Лендинг «ROI внедрения CRM»`,
+          COMMENTS: leadComment,
         },
       }),
     })
@@ -112,7 +117,9 @@ const submitLeadHandler = async (req, res) => {
     transporter.sendMail({
       from: '"EstateCRM - Sales" <sales@estatecrm.io>',
       to: 'sales@estatecrm.io',
-      subject: 'Новая заявка: Лендинг "ROI" - Форма "Расчёт ROI"',
+      subject: isDemo
+        ? 'Новая заявка: Лендинг "ROI" - Форма "Записаться на демо"'
+        : 'Новая заявка: Лендинг "ROI" - Форма "Расчёт ROI"',
       html: buildEmailHtml({ name, company, email, phone, url: pageUrl }),
     }).catch(err => console.error('Email send error:', err))
 

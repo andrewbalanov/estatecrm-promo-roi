@@ -86,8 +86,8 @@ input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 17p
 .sdiv { height: 1px; background: var(--g3); margin-bottom: 10px; }
 .sl { display: flex; justify-content: space-between; align-items: center; font-size: 11px; padding: 3px 0; border-bottom: 1px dashed var(--g3); }
 .sl:last-child { border-bottom: none; }
-.sl span:first-child { color: var(--g6); flex: 1; }
-.sl span:last-child { font-weight: 700; color: var(--primary); white-space: nowrap; margin-left: 6px; text-align: right; }
+.sl > span:first-child { color: var(--g6); flex: 1; }
+.sl > span:last-child { font-weight: 700; color: var(--primary); white-space: nowrap; margin-left: 6px; text-align: right; }
 .btag { display: inline-block; padding: 2px 8px; border-radius: 48px; font-size: 10px; font-weight: 700; text-transform: uppercase; background: var(--secondary); color: #fff; margin-bottom: 3px; }
 
 /* TABLE */

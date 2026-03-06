@@ -7,15 +7,16 @@ import FormModal from './components/FormModal'
 import './App.css'
 
 function App() {
-  const [modalOpen, setModalOpen] = useState(false)
+  const [roiModalOpen, setRoiModalOpen] = useState(false)
+  const [demoModalOpen, setDemoModalOpen] = useState(false)
   const calcCallbackRef = useRef(null)
 
   const handleOpenForm = (callback) => {
     calcCallbackRef.current = callback
-    setModalOpen(true)
+    setRoiModalOpen(true)
   }
 
-  const handleFormSuccess = (company) => {
+  const handleRoiSuccess = (company) => {
     if (calcCallbackRef.current) {
       calcCallbackRef.current(company)
       calcCallbackRef.current = null
@@ -31,11 +32,17 @@ function App() {
       <HeroSection />
       <Calculator onOpenForm={handleOpenForm} />
       <CasesSection />
-      <CtaSection onPdfCta={handlePdfCta} />
+      <CtaSection onOpenDemo={() => setDemoModalOpen(true)} onPdfCta={handlePdfCta} />
       <FormModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onSuccess={handleFormSuccess}
+        isOpen={roiModalOpen}
+        onClose={() => setRoiModalOpen(false)}
+        onSuccess={handleRoiSuccess}
+        variant="roi"
+      />
+      <FormModal
+        isOpen={demoModalOpen}
+        onClose={() => setDemoModalOpen(false)}
+        variant="demo"
       />
     </div>
   )

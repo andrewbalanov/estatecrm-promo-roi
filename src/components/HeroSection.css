@@ -1,3 +1,8 @@
+.hero-logo {
+  height: 32px;
+  margin-bottom: 28px;
+  mix-blend-mode: lighten;
+}
 .hero {
   background: radial-gradient(ellipse 65% 90% at 50% 50%, rgba(80,60,180,.15) 0%, transparent 70%), var(--dark);
   padding: 64px 40px 72px;
