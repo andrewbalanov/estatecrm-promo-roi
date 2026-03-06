@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react'
+import Navbar from './components/Navbar'
 import HeroSection from './components/HeroSection'
 import Calculator from './components/Calculator'
 import CasesSection from './components/CasesSection'
@@ -30,6 +31,7 @@ function App() {
 
   return (
     <div className="landing">
+      <Navbar onOpenDemo={() => setDemoModalOpen(true)} />
       <HeroSection />
       <Calculator onOpenForm={handleOpenForm} onCalcDone={() => setPdfReady(true)} />
       <CasesSection />

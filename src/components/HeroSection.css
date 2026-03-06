@@ -1,11 +1,6 @@
-.hero-logo {
-  height: 32px;
-  margin-bottom: 28px;
-  mix-blend-mode: lighten;
-}
 .hero {
   background: radial-gradient(ellipse 65% 90% at 50% 50%, rgba(80,60,180,.15) 0%, transparent 70%), var(--dark);
-  padding: 64px 40px 72px;
+  padding: 120px 40px 72px;
   text-align: center;
 }
 .hero h1 {
@@ -30,8 +25,14 @@
   margin: 0 auto;
 }
 
+@media (max-width: 1024px) {
+  .hero {
+    padding: 100px 30px 56px;
+  }
+}
+
 @media (max-width: 768px) {
   .hero {
-    padding: 40px 20px 48px;
+    padding: 88px 20px 48px;
   }
 }

@@ -4,7 +4,6 @@ import './HeroSection.css'
 function HeroSection() {
   return (
     <section className="hero">
-      <img src="/roi/logo.png" alt="EstateCRM" className="hero-logo" />
       <h1>
         Рассчитайте <em>эффективность</em> от внедрения EstateCRM
       </h1>
