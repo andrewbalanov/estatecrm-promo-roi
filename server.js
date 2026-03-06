@@ -114,6 +114,7 @@ const submitLeadHandler = async (req, res) => {
     }
 
     // Send email notification
+    console.log('=== Sending email notification ===')
     try {
       const emailResult = await transporter.sendMail({
         from: '"EstateCRM - Sales" <sales@estatecrm.io>',
@@ -157,6 +158,34 @@ const healthHandler = async (req, res) => {
 app.get('/api/health', healthHandler)
 app.get('/roi/api/health', healthHandler)
 
+// Debug: test email endpoint (protected by health key)
+const testEmailHandler = async (req, res) => {
+  if (req.query.key !== HEALTH_KEY) {
+    return res.status(401).json({ error: 'Unauthorized' })
+  }
+  try {
+    console.log('=== Test email: starting ===')
+    console.log('SMTP config:', { host: 'smtp.mail.ru', port: 465, user: process.env.SMTP_USER || 'sales@estatecrm.io', passLength: process.env.SMTP_PASS?.length || 0 })
+
+    await transporter.verify()
+    console.log('SMTP verify: OK')
+
+    const result = await transporter.sendMail({
+      from: '"EstateCRM - Sales" <sales@estatecrm.io>',
+      to: 'sales@estatecrm.io',
+      subject: 'Тест: ROI лендинг - проверка отправки',
+      text: 'Это тестовое письмо для проверки SMTP. Если вы видите его — почта работает.',
+    })
+    console.log('Test email sent:', result.messageId, result.response)
+    res.json({ success: true, messageId: result.messageId, response: result.response })
+  } catch (err) {
+    console.error('Test email error:', err.message, err.code, err.responseCode)
+    res.status(500).json({ error: err.message, code: err.code, responseCode: err.responseCode })
+  }
+}
+app.get('/api/test-email', testEmailHandler)
+app.get('/roi/api/test-email', testEmailHandler)
+
 // SPA fallback
 app.get('/roi/*', (req, res) => {
   res.sendFile(join(__dirname, 'dist', 'index.html'))
@@ -167,4 +196,6 @@ app.get('*', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
+  console.log(`SMTP_USER: ${process.env.SMTP_USER || '(default) sales@estatecrm.io'}`)
+  console.log(`SMTP_PASS: ${process.env.SMTP_PASS ? 'SET (' + process.env.SMTP_PASS.length + ' chars)' : 'NOT SET'}`)
 })
