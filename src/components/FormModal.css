@@ -1,0 +1,89 @@
+.mo {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(8,10,35,.72);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px);
+}
+.mo.on { display: flex; }
+.mb {
+  background: #fff;
+  border-radius: 18px;
+  padding: 36px 32px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 20px 70px rgba(0,0,0,.28);
+  position: relative;
+}
+.mc {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: var(--g5);
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+.mc:hover { color: var(--g8); }
+.mt { font-size: 19px; font-weight: 700; color: var(--primary); margin-bottom: 3px; }
+.ms { font-size: 13px; color: var(--g6); margin-bottom: 22px; }
+.fg { margin-bottom: 14px; }
+.fg label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--g6);
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+.fg input, .fg select {
+  width: 100%;
+  background: var(--bg2);
+  border: 1.5px solid var(--g4);
+  border-radius: 8px;
+  padding: 9px 11px;
+  font-family: var(--font);
+  font-size: 14px;
+  color: var(--g8);
+  outline: none;
+  transition: border-color .2s;
+}
+.fg input:focus, .fg select:focus {
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 3px rgba(67,86,210,.09);
+}
+.fg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+.btn-fs {
+  width: 100%;
+  background: var(--secondary);
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: var(--font);
+  margin-top: 6px;
+  box-shadow: 0 4px 14px rgba(67,86,210,.3);
+  transition: all .2s;
+}
+.btn-fs:hover { background: var(--blue); }
+.btn-fs:disabled { opacity: .6; cursor: not-allowed; }
+.fn { font-size: 11px; color: var(--g5); text-align: center; margin-top: 10px; }
+
+@media (max-width: 480px) {
+  .mb { padding: 28px 18px; margin: 0 12px; }
+  .fg-row { grid-template-columns: 1fr; }
+}
+
+@media print {
+  .mo { display: none !important; }
+}

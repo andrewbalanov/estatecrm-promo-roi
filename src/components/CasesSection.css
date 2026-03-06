@@ -1,0 +1,37 @@
+.cases-sec {
+  background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(80,60,180,.11) 0%, transparent 70%), var(--dark);
+  padding: 50px 40px 54px;
+}
+.cases-head { text-align: center; margin-bottom: 30px; }
+.cases-head h2 { font-size: clamp(18px, 2vw, 26px); font-weight: 700; color: #fff; margin-bottom: 5px; }
+.cases-head p { font-size: 13px; color: rgba(255,255,255,.38); }
+.cases-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; max-width: 1100px; margin: 0 auto; }
+.case { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.09); border-radius: 14px; padding: 24px; position: relative; overflow: hidden; transition: background .2s, transform .15s; }
+.case:hover { background: rgba(255,255,255,.07); transform: translateY(-2px); }
+.case::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.c1::before { background: var(--secondary); }
+.c2::before { background: var(--orange); }
+.c3::before { background: var(--green); }
+.cco { font-size: 10px; font-weight: 700; letter-spacing: 1.1px; text-transform: uppercase; color: rgba(255,255,255,.32); margin-bottom: 5px; }
+.cres { display: inline-block; padding: 3px 9px; border-radius: 5px; font-size: 10px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; margin-bottom: 12px; }
+.c1 .cres { background: rgba(67,86,210,.18); color: #8fa3f5; border: 1px solid rgba(67,86,210,.28); }
+.c2 .cres { background: rgba(255,106,66,.13); color: #ff9a7a; border: 1px solid rgba(255,106,66,.28); }
+.c3 .cres { background: rgba(134,203,60,.1); color: #a6db5c; border: 1px solid rgba(134,203,60,.22); }
+.cttl { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 14px; line-height: 1.35; }
+.cm { display: flex; gap: 10px; margin-bottom: 8px; align-items: flex-start; }
+.cm:last-child { margin-bottom: 0; }
+.csep { width: 1px; background: rgba(255,255,255,.12); flex-shrink: 0; min-height: 14px; margin-top: 4px; align-self: stretch; }
+.cmt { font-size: 12px; color: rgba(255,255,255,.58); line-height: 1.4; }
+.cmv { font-weight: 700; color: #fff; }
+
+@media (max-width: 1100px) {
+  .cases-grid { grid-template-columns: 1fr; max-width: 500px; }
+}
+
+@media (max-width: 768px) {
+  .cases-sec { padding: 36px 16px 40px; }
+}
+
+@media print {
+  .cases-sec { display: none !important; }
+}

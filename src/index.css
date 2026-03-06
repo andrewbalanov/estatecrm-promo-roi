@@ -1,0 +1,42 @@
+:root {
+  --primary: #202358;
+  --secondary: #4356D2;
+  --blue: #0033A1;
+  --green: #86CB3C;
+  --gd: #5a9b21;
+  --orange: #FF6A42;
+  --teal: #00CEE0;
+  --td: #0099ab;
+  --bg2: #F6F8FF;
+  --bg3: #F2F4FD;
+  --bg4: #E3EBFF;
+  --bg5: #C6D7FE;
+  --g3: #E9F1FA;
+  --g4: #D1D6E5;
+  --g5: #969BB5;
+  --g6: #656C86;
+  --g8: #333B52;
+  --white: #FFFFFF;
+  --font: 'Ubuntu', sans-serif;
+  --dark: #0e1130;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--white);
+  color: var(--g8);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
